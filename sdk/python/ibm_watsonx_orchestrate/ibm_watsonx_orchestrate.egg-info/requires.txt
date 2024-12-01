@@ -1,0 +1,7 @@
+requests
+urllib3
+certifi
+pandas
+tabulate
+packaging
+importlib-metadata
