@@ -2,7 +2,7 @@
 name = "wxo-clients"
 version = "0.1.0"
 description = "IBM watsonx.orchestrate SDK"
-author="IBM",
+author="IBM"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
