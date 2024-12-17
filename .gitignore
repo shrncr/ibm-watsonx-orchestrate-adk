@@ -65,7 +65,6 @@ sdk/python/ibm_watsonx_orchestrate/ibm_watsonx_orchestrate/_wrappers/__pycache__
 sdk/python/ibm_watsonx_orchestrate/ibm_watsonx_orchestrate/utils/__pycache__/
 
 # Build scripts
-*.sh
 .DS_Store
 *.bak
 *.tmp

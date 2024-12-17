@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 import re
 
 if TYPE_CHECKING:
-    from ibm_watsonx_orchestrate.client import Client
+    from ibm_watsonx_orchestrate.client.client import Client
 
 DEPLOYMENTS_HREF_PATTERN = "{}/v4/deployments"
 DEPLOYMENT_HREF_PATTERN = "{}/v4/deployments/{}"

@@ -1,7 +1,7 @@
 # Assisted by WCA@IBM
 # Latest GenAI contribution: ibm/granite-8b-code-instruct
 import unittest
-from ibm_watsonx_orchestrate.credentials import Credentials
+from ibm_watsonx_orchestrate.client.credentials import Credentials
 
 class TestCredentials(unittest.TestCase):
     def test_init(self):
