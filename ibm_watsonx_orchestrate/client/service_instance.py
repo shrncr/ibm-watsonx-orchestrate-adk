@@ -11,10 +11,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
-from ibm_watsonx_orchestrate._wrappers import requests
-from ibm_watsonx_orchestrate.href_definitions import HrefDefinitions
+from ibm_watsonx_orchestrate.client._wrappers import requests
+from ibm_watsonx_orchestrate.client.resources.href_definitions import HrefDefinitions
 
-from ibm_watsonx_orchestrate.client_errors import (
+from ibm_watsonx_orchestrate.client.client_errors import (
     ClientError,
     ApiRequestFailure,
     NoCredentialsProvided,

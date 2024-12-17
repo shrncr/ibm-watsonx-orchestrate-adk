@@ -27,9 +27,9 @@ from packaging import version
 from warnings import warn
 
 from ibm_watsonx_orchestrate import ver, pkg_name
-import ibm_watsonx_orchestrate._wrappers.requests as requests
+import ibm_watsonx_orchestrate.client._wrappers.requests as requests
 
-from ibm_watsonx_orchestrate.client_errors import (
+from ibm_watsonx_orchestrate.client.client_errors import (
     ClientError,
     CannotInstallLibrary,
 )

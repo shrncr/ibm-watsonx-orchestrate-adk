@@ -17,13 +17,13 @@ from typing import (
     Generator,
 )
 
-import ibm_watsonx_orchestrate._wrappers.requests as requests
+import ibm_watsonx_orchestrate.client._wrappers.requests as requests
 from ibm_watsonx_orchestrate import Credentials
 # from ibm_watsonx_orchestrate.utils import (
 #     # get_type_of_details,
 #     next_resource_generator,
 # )
-from ibm_watsonx_orchestrate.client_errors import (
+from ibm_watsonx_orchestrate.client.client_errors import (
     MissingValue,
     ClientError,
     NoCredentialsProvided,

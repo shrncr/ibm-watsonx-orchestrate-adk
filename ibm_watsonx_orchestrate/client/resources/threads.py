@@ -9,9 +9,9 @@ from typing import Any, TYPE_CHECKING, List
 
 import os
 import warnings
-import ibm_watsonx_orchestrate._wrappers.requests as requests
-from ibm_watsonx_orchestrate.wxo_resource import WXOResource
-from ibm_watsonx_orchestrate.client_errors import (
+import ibm_watsonx_orchestrate.client._wrappers.requests as requests
+from ibm_watsonx_orchestrate.client.resources.wxo_resource import WXOResource
+from ibm_watsonx_orchestrate.client.client_errors import (
     ClientError,
     ApiRequestFailure,
     ForbiddenActionForGitBasedProject,

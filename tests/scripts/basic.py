@@ -1,10 +1,10 @@
-from ibm_watsonx_orchestrate.credentials import Credentials
+from ibm_watsonx_orchestrate.client.credentials import Credentials
 from ibm_watsonx_orchestrate.client import Client
 
 # Set platform details.
 # Note: wxo_instance_id pertains to the wxO tenant ID.
 wxo_url = "https://dev-conn.watson-orchestrate.ibm.com"
-wxo_api_key = "azE6dXNyX2FmOWU5MzlmLTVmNDgtM2JjZi1iMDU0LTVhMWRlY2FiMDI4ZDpFVjhJTmpvU1FuVTNNMFNLMXMwa1NHWVhUdHdtQzZ6Si9XTjJUOUEyRjhFPTphMUhW"
+wxo_api_key = "xxxxx"
 wxo_instance_id = "20240527-1123-0088-305a-b311748cb470"
 
 
