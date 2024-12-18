@@ -29,7 +29,7 @@ The `-e` flag is optional and stands for "editable mode." This allows you to mak
 
 ---
 
-## How to Build the Package
+## How to Build the distributable Package
 
 To build the package, use [Hatch](https://hatch.pypa.io/latest/), a modern Python project management tool. Follow these steps:
 
