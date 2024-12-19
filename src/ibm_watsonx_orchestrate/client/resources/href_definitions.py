@@ -27,12 +27,12 @@ GET_MESSAGES_IN_THREAD_HREF_PATTERN = "{}/v1/orchestrate/threads/{}/messages"
 LIST_THREADS_HREF_PATTERN = "{}/v1/orchestrate/threads"
 
 def is_url(s: str) -> bool:
-    res = re.match("https?:\/\/.+", s)
+    res = re.match(r"https?:\/\/.+", s)
     return res is not None
 
 
 def is_id(s: str) -> bool:
-    res = re.match("[a-z0-9\-]{36}", s)
+    res = re.match(r"[a-z0-9\-]{36}", s)
     return res is not None
 
 

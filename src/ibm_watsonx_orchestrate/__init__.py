@@ -15,8 +15,8 @@ except (ModuleNotFoundError, AttributeError):
 
     ver = imp_lib_ver(pkg_name)
 
-from ibm_watsonx_orchestrate.credentials import Credentials
-from ibm_watsonx_orchestrate.client import Client
+from ibm_watsonx_orchestrate.client.credentials import Credentials
+from ibm_watsonx_orchestrate.client.client import Client
 
 Client.version = ver
 __version__ = ver
