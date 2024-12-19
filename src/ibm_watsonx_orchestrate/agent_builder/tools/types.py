@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import List, Any, Dict, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
+
 
 class ToolPermission(str, Enum):
     READ_ONLY = 'READ_ONLY'
@@ -54,6 +55,25 @@ class OpenApiSecurityScheme(BaseModel):
     open_id_connect_url: str = None
     flows: dict = None
 
+    @model_validator(mode='after')
+    def validate_security_scheme(self) -> 'OpenApiSecurityScheme':
+        if self.type == 'http' and self.scheme is None:
+            raise ValueError("'scheme' is required when type is 'http'")
+
+        if self.type == 'oauth2' and self.flows is None:
+            raise ValueError("'flows' is required when type is 'oauth2'")
+
+        if self.type == 'openIdConnect' and self.open_id_connect_url is None:
+            raise ValueError("'open_id_connect_url' is required when type is 'openIdConnect'")
+
+        if self.type == 'apiKey':
+            if self.name is None:
+                raise ValueError("'name' is required when type is 'apiKey'")
+            if self.in_field is None:
+                raise ValueError("'in_field' is required when type is 'apiKey'")
+
+        return self
+
 
 HTTP_METHOD = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
@@ -75,6 +95,12 @@ class WxFlowsToolBinding(BaseModel):
     flow_name: str
     security: OpenApiSecurityScheme
 
+    @model_validator(mode='after')
+    def validate_security_scheme(self) -> 'WxFlowsToolBinding':
+        if self.security.type != 'apiKey':
+            raise ValueError("'security' scheme must be of type 'apiKey'")
+        return self
+
 
 class SkillToolBinding(BaseModel):
     skillset_id: str
@@ -93,6 +119,21 @@ class ToolBinding(BaseModel):
     wxflows: WxFlowsToolBinding = None
     skill: SkillToolBinding = None
     client_side: ClientSideToolBinding = None
+
+    @model_validator(mode='after')
+    def validate_binding_type(self) -> 'ToolBinding':
+        bindings = [
+            self.openapi is not None,
+            self.python is not None,
+            self.wxflows is not None,
+            self.skill is not None,
+            self.client_side is not None
+        ]
+        if sum(bindings) == 0:
+            raise ValueError("One binding must be set")
+        if sum(bindings) > 1:
+            raise ValueError("Only one binding can be set")
+        return self
 
 
 class ToolSpec(BaseModel):
