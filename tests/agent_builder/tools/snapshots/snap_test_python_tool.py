@@ -23,8 +23,6 @@ snapshots['test_should_be_possible_to_override_defaults 1'] = {
     },
     'name': 'myName',
     'output_schema': {
-        'properties': {
-        }
     },
     'permission': 'ADMIN'
 }
@@ -35,7 +33,6 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
             'function': 'test_python_tool:sample_tool'
         }
     },
-    'description': None,
     'input_schema': {
         'properties': {
             'b': {
@@ -45,18 +42,10 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                         'type': 'string'
                     },
                     'b': {
-                        'anyOf': [
-                            {
-                                'type': 'string'
-                            },
-                            {
-                                'type': 'null'
-                            }
-                        ],
-                        'title': 'B'
+                        'title': 'B',
+                        'type': 'string'
                     },
                     'c': {
-                        'default': None,
                         'title': 'C',
                         'type': 'string'
                     },
@@ -74,24 +63,17 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                         'type': 'object'
                     },
                     'e': {
-                        'anyOf': [
-                            {
-                                'properties': {
-                                    'na': {
-                                        'title': 'Na',
-                                        'type': 'integer'
-                                    }
-                                },
-                                'required': [
-                                    'na'
-                                ],
-                                'title': 'Nested',
-                                'type': 'object'
-                            },
-                            {
-                                'type': 'null'
+                        'properties': {
+                            'na': {
+                                'title': 'Na',
+                                'type': 'integer'
                             }
-                        ]
+                        },
+                        'required': [
+                            'na'
+                        ],
+                        'title': 'Nested',
+                        'type': 'object'
                     },
                     'f': {
                         'properties': {
@@ -109,9 +91,7 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                 },
                 'required': [
                     'a',
-                    'b',
-                    'd',
-                    'e'
+                    'd'
                 ],
                 'title': 'SampleParamA',
                 'type': 'object'
@@ -123,18 +103,10 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                         'type': 'string'
                     },
                     'b': {
-                        'anyOf': [
-                            {
-                                'type': 'string'
-                            },
-                            {
-                                'type': 'null'
-                            }
-                        ],
-                        'title': 'B'
+                        'title': 'B',
+                        'type': 'string'
                     },
                     'c': {
-                        'default': None,
                         'title': 'C',
                         'type': 'string'
                     },
@@ -152,24 +124,17 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                         'type': 'object'
                     },
                     'e': {
-                        'anyOf': [
-                            {
-                                'properties': {
-                                    'na': {
-                                        'title': 'Na',
-                                        'type': 'integer'
-                                    }
-                                },
-                                'required': [
-                                    'na'
-                                ],
-                                'title': 'Nested',
-                                'type': 'object'
-                            },
-                            {
-                                'type': 'null'
+                        'properties': {
+                            'na': {
+                                'title': 'Na',
+                                'type': 'integer'
                             }
-                        ]
+                        },
+                        'required': [
+                            'na'
+                        ],
+                        'title': 'Nested',
+                        'type': 'object'
                     },
                     'f': {
                         'properties': {
@@ -187,9 +152,7 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                 },
                 'required': [
                     'a',
-                    'b',
-                    'd',
-                    'e'
+                    'd'
                 ],
                 'title': 'SampleParamA',
                 'type': 'object'
@@ -208,18 +171,10 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                 'type': 'string'
             },
             'b': {
-                'anyOf': [
-                    {
-                        'type': 'string'
-                    },
-                    {
-                        'type': 'null'
-                    }
-                ],
-                'title': 'B'
+                'title': 'B',
+                'type': 'string'
             },
             'c': {
-                'default': None,
                 'title': 'C',
                 'type': 'string'
             },
@@ -237,24 +192,17 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
                 'type': 'object'
             },
             'e': {
-                'anyOf': [
-                    {
-                        'properties': {
-                            'na': {
-                                'title': 'Na',
-                                'type': 'integer'
-                            }
-                        },
-                        'required': [
-                            'na'
-                        ],
-                        'title': 'Nested',
-                        'type': 'object'
-                    },
-                    {
-                        'type': 'null'
+                'properties': {
+                    'na': {
+                        'title': 'Na',
+                        'type': 'integer'
                     }
-                ]
+                },
+                'required': [
+                    'na'
+                ],
+                'title': 'Nested',
+                'type': 'object'
             },
             'f': {
                 'properties': {
@@ -272,10 +220,9 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
         },
         'required': [
             'a',
-            'b',
-            'd',
-            'e'
+            'd'
         ],
+        'title': 'SampleParamA',
         'type': 'object'
     },
     'permission': 'READ_ONLY'
@@ -291,6 +238,7 @@ snapshots['test_should_support_typed_none_args 1'] = {
     'input_schema': {
         'properties': {
             'input': {
+                'title': 'Input',
                 'type': 'null'
             }
         },
@@ -315,6 +263,7 @@ snapshots['test_should_support_typed_optional_args 1'] = {
     'input_schema': {
         'properties': {
             'input': {
+                'title': 'Input',
                 'type': 'string'
             }
         },
@@ -346,6 +295,7 @@ snapshots['test_should_support_typed_typings_inputs_and_outputs 1'] = {
     'input_schema': {
         'properties': {
             'input': {
+                'title': 'Input',
                 'type': 'string'
             }
         },
@@ -367,7 +317,6 @@ snapshots['test_should_use_correct_defaults 1'] = {
             'function': 'test_python_tool:my_tool'
         }
     },
-    'description': None,
     'input_schema': {
         'properties': {
         },
@@ -377,8 +326,6 @@ snapshots['test_should_use_correct_defaults 1'] = {
     },
     'name': 'my_tool',
     'output_schema': {
-        'properties': {
-        }
     },
     'permission': 'READ_ONLY'
 }
@@ -389,13 +336,20 @@ snapshots['test_should_work_with_dicts 1'] = {
             'function': 'test_python_tool:sample_tool'
         }
     },
-    'description': None,
     'input_schema': {
         'properties': {
             'b': {
+                'additionalProperties': {
+                    'type': 'string'
+                },
+                'title': 'B',
                 'type': 'object'
             },
             'sampleA': {
+                'additionalProperties': {
+                    'type': 'string'
+                },
+                'title': 'Samplea',
                 'type': 'object'
             }
         },
@@ -407,6 +361,9 @@ snapshots['test_should_work_with_dicts 1'] = {
     'name': 'sample_tool',
     'output_schema': {
         'items': {
+            'additionalProperties': {
+                'type': 'string'
+            },
             'type': 'object'
         },
         'type': 'array'
@@ -420,19 +377,20 @@ snapshots['test_should_work_with_lists 1'] = {
             'function': 'test_python_tool:sample_tool'
         }
     },
-    'description': None,
     'input_schema': {
         'properties': {
             'b': {
                 'items': {
                     'type': 'string'
                 },
+                'title': 'B',
                 'type': 'array'
             },
             'sampleA': {
                 'items': {
                     'type': 'string'
                 },
+                'title': 'Samplea',
                 'type': 'array'
             }
         },

@@ -15,7 +15,7 @@ def test_should_use_correct_defaults(snapshot):
     spec['binding']['python']['function'] = spec['binding']['python']['function'].split('.')[-1]
     snapshot.assert_match(spec)
     assert spec['name'] == 'my_tool'
-    assert spec['description'] == None
+    assert spec.get('description') == None
     assert spec['permission'] == 'READ_ONLY'
     assert spec['binding']['python']['function'] == 'test_python_tool:my_tool'
 

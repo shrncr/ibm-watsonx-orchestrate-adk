@@ -6,17 +6,17 @@ from .types import ToolSpec
 
 
 class BaseTool:
-    spec: ToolSpec
+    __tool_spec__: ToolSpec
 
     def __init__(self, spec: ToolSpec):
-        self.spec = spec
+        self.__tool_spec__ = spec
 
 
     def __call__(self, **kwargs):
         pass
 
     def dump_spec(self, file: str) -> None:
-        dumped = self.spec.model_dump(mode='json', exclude_unset=True)
+        dumped = self.__tool_spec__.model_dump(mode='json', exclude_unset=True, exclude_none=True)
         with open(file, 'w') as f:
             if file.endswith('.yaml') or file.endswith('.yml'):
                 yaml.dump(dumped, f)
@@ -26,8 +26,12 @@ class BaseTool:
                 raise ValueError('file must end in .json, .yaml, or .yml')
 
     def dumps_spec(self) -> str:
-        dumped = self.spec.model_dump(mode='json', exclude_unset=True)
+        dumped = self.__tool_spec__.model_dump(mode='json', exclude_unset=True, exclude_none=True)
         return json.dumps(dumped, indent=2)
 
+    def to_langchain_tool(self):
+        from .integrations.langchain import as_langchain_tool
+        return as_langchain_tool(self)
+
     def __repr__(self):
-        return f"Tool(name='{self.spec.name}', description='{self.spec.description}')"
+        return f"Tool(name='{self.__tool_spec__.name}', description='{self.__tool_spec__.description}')"

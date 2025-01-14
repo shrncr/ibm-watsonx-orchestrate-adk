@@ -2,16 +2,18 @@ import importlib
 import inspect
 import json
 import os
-from types import NoneType
+from typing import Callable
 
 import docstring_parser
 import yaml
+from langchain_core.tools.base import create_schema_from_function
+from langchain_core.utils.json_schema import dereference_refs
+from openai import BaseModel
 from pydantic import TypeAdapter
-import jsonref
 
+from .base_tool import BaseTool
 from .types import ToolSpec, ToolPermission, ToolRequestBody, ToolResponseBody, JsonSchemaObject, ToolBinding, \
     PythonToolBinding
-from .base_tool import BaseTool
 from ..utils.config import runtime_context
 
 _all_tools = []
@@ -49,10 +51,41 @@ class PythonTool(BaseTool):
         return PythonTool(fn=fn, spec=spec)
 
     def __repr__(self):
-        return f"PythonTool(fn={self.spec.binding.python.function}, name='{self.spec.name}', description='{self.spec.description}')"
+        return f"PythonTool(fn={self.__tool_spec__.binding.python.function}, name='{self.__tool_spec__.name}', description='{self.__tool_spec__.description}')"
 
     def __str__(self):
         return self.__repr__()
+
+def _fix_optional(schema):
+    if schema.properties is None:
+        return schema
+    # Pydantic tends to create types of anyOf: [{type: thing}, {type: null}] instead of simply
+    # while simultaneously marking the field as required, which can be confusing for the model.
+    # This removes union types with null and simply marks the field as not required
+    not_required = []
+    replacements = {}
+    for k, v in schema.properties.items():
+        if v.type == 'null' and k in schema.required:
+            not_required.append(k)
+        if v.anyOf is not None and next(filter(lambda x: x.type == 'null', v.anyOf)) and k in schema.required:
+            v.anyOf = list(filter(lambda x: x.type != 'null', v.anyOf))
+            if len(v.anyOf) == 1:
+                replacements[k] = v.anyOf[0]
+            not_required.append(k)
+    schema.required = list(filter(lambda x: x not in not_required, schema.required if schema.required is not None else []))
+    for k, v in replacements.items():
+        combined = {
+            **schema.properties[k].model_dump(exclude_unset=True, exclude_none=True),
+            **v.model_dump(exclude_unset=True, exclude_none=True)
+        }
+        schema.properties[k] = JsonSchemaObject(**combined)
+        schema.properties[k].anyOf = None
+
+    for k in schema.properties.keys():
+        if schema.properties[k].type == 'object':
+            schema.properties[k] = _fix_optional(schema.properties[k])
+
+    return schema
 
 
 def tool(
@@ -61,7 +94,7 @@ def tool(
     input_schema: ToolRequestBody = None,
     output_schema: ToolResponseBody = None,
     permission: ToolPermission = ToolPermission.READ_ONLY
-) -> PythonTool:
+) -> Callable[[{__name__, __doc__}], PythonTool]:
     """
     Decorator to convert a python function into a callable tool.
 
@@ -101,40 +134,31 @@ def tool(
 
         sig = inspect.signature(fn)
         if not input_schema:
+            input_schema_model: type[BaseModel] = create_schema_from_function(spec.name, fn, parse_docstring=True)
+            input_schema_json = input_schema_model.model_json_schema()
+            input_schema_json = dereference_refs(input_schema_json)
+
+            # Convert the input schema to a JsonSchemaObject
+            input_schema_obj = JsonSchemaObject(**input_schema_json)
+            input_schema_obj = _fix_optional(input_schema_obj)
+
             spec.input_schema = ToolRequestBody(
                 type='object',
-                properties={},
-                required=[]
+                properties=input_schema_obj.properties or {},
+                required=input_schema_obj.required or []
             )
-
-            params = sig.parameters
-            for n, param in params.items():
-                is_optional = param.annotation is None or param.annotation.__name__ == 'Optional'
-                if param.default is param.empty and not is_optional:
-                    spec.input_schema.required.append(n)
-
-                if param.annotation:
-                    annotation = next(filter(lambda x: not isinstance(x, NoneType), param.annotation.__args__), None) \
-                        if param.annotation.__name__ == 'Optional' \
-                        else param.annotation
-
-                    spec.input_schema.properties[n] = JsonSchemaObject.parse_obj(jsonref.replace_refs(TypeAdapter(annotation).json_schema()))
-                else:
-                    spec.input_schema.properties[n] = JsonSchemaObject(properties={}) if param.annotation is not None else JsonSchemaObject(type='null')
-
-                doc_arg = next(filter(lambda x: x.arg_name == n, doc.params if doc is not None else []), None)
-                if doc_arg:
-                    spec.input_schema.properties[n].description = doc_arg.description
-
         else:
             spec.input_schema = input_schema
 
         if not output_schema:
             ret = sig.return_annotation
             if ret != sig.empty:
-                spec.output_schema = ToolResponseBody.parse_obj(jsonref.replace_refs(TypeAdapter(ret).json_schema()))
+                _schema = dereference_refs(TypeAdapter(ret).json_schema())
+                if '$defs' in _schema:
+                    _schema.pop('$defs')
+                spec.output_schema = _fix_optional(ToolResponseBody(**_schema))
             else:
-                spec.output_schema = ToolResponseBody(properties={})
+                spec.output_schema = ToolResponseBody()
 
             if doc is not None and doc.returns is not None and doc.returns.description is not None:
                 spec.output_schema.description = doc.returns.description

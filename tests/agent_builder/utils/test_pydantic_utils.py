@@ -13,12 +13,12 @@ def test_should_use_correct_defaults(snapshot):
         pass
 
     spec = json.loads(my_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -30,12 +30,12 @@ def test_should_be_possible_to_override_defaults(snapshot):
         pass
 
     spec = json.loads(my_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -47,12 +47,12 @@ def test_should_support_typed_typings_inputs_and_outputs(snapshot):
         pass
 
     spec = json.loads(my_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -67,12 +67,12 @@ def test_should_support_typed_none_args(snapshot):
         pass
 
     spec = json.loads(my_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -84,12 +84,12 @@ def test_should_support_typed_optional_args(snapshot):
         pass
 
     spec = json.loads(my_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=my_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -113,12 +113,12 @@ def test_should_support_pydantic_typed_args(snapshot):
         pass
 
     spec = json.loads(sample_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -130,12 +130,12 @@ def test_should_work_with_lists(snapshot):
         pass
 
     spec = json.loads(sample_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())
@@ -147,12 +147,12 @@ def test_should_work_with_dicts(snapshot):
         pass
 
     spec = json.loads(sample_tool.dumps_spec())
-    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.input_schema)
+    InputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.input_schema)
     assert spec['input_schema'] == InputBaseModel.model_json_schema()
     assert spec['input_schema'] == InputBaseModel.schema()
     assert spec['input_schema'] == json.loads(InputBaseModel.schema_json())
 
-    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.spec.output_schema)
+    OutputBaseModel = generate_schema_only_base_model(schema=sample_tool.__tool_spec__.output_schema)
     assert spec['output_schema'] == OutputBaseModel.model_json_schema()
     assert spec['output_schema'] == OutputBaseModel.schema()
     assert spec['output_schema'] == json.loads(OutputBaseModel.schema_json())

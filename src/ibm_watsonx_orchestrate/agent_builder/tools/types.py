@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import List, Any, Dict, Literal
+from typing import List, Any, Dict, Literal, Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, ConfigDict, Field
 
 
 class ToolPermission(str, Enum):
@@ -12,7 +12,9 @@ class ToolPermission(str, Enum):
 
 
 class JsonSchemaObject(BaseModel):
-    type: Any = None
+    model_config = ConfigDict(extra='allow')
+
+    type: Literal['object', 'string', 'number', 'integer', 'boolean', 'array', 'null'] = 'object'
     title: str = None
     description: str = None
     properties: Dict[str, 'JsonSchemaObject'] = None
@@ -27,17 +29,20 @@ class JsonSchemaObject(BaseModel):
     maxLength: int = None
     format: str = None
     anyOf: List['JsonSchemaObject'] = None
-    in_field: Literal['query', 'head', 'path', 'body'] = None
+    in_field: Optional[Literal['query', 'header', 'path', 'body']] = Field(None, alias='in')
 
 
 class ToolRequestBody(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
     type: Literal['object']
     properties: Dict[str, JsonSchemaObject]
     required: List[str]
-    anyOf: List['JsonSchemaObject'] = None
 
 
 class ToolResponseBody(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
     type: Literal['object', 'string', 'number', 'integer', 'boolean', 'array','null'] = None
     description: str = None
     properties: Dict[str, JsonSchemaObject] = None
@@ -48,6 +53,8 @@ class ToolResponseBody(BaseModel):
 
 
 class OpenApiSecurityScheme(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
     type: Literal['apiKey', 'http', 'oauth2', 'openIdConnect']
     scheme: Literal['basic', 'bearer', 'oauth'] = None
     in_field: Literal['query', 'header', 'cookie'] = None

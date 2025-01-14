@@ -39,16 +39,16 @@ def generate_schema_only_base_model(schema: ToolRequestBody | ToolResponseBody |
         def model_json_schema(cls, by_alias: bool = True, ref_template: str = DEFAULT_REF_TEMPLATE,
                               schema_generator: type[GenerateJsonSchema] = GenerateJsonSchema,
                               mode: JsonSchemaMode = 'validation') -> dict[str, Any]:
-            return schema.model_dump(exclude_unset=True)
+            return schema.model_dump(exclude_unset=True, exclude_none=True)
 
         @classmethod
         def schema(cls, by_alias: bool = True, ref_template: str = DEFAULT_REF_TEMPLATE) -> Dict[str, Any]:
-            return schema.model_dump(exclude_unset=True)
+            return schema.model_dump(exclude_unset=True, exclude_none=True)
 
         @classmethod
         def schema_json(cls, *, by_alias: bool = True, ref_template: str = DEFAULT_REF_TEMPLATE,
                         **dumps_kwargs: Any) -> str:
-            return schema.model_dump_json(exclude_unset=True)
+            return schema.model_dump_json(exclude_unset=True, exclude_none=True)
 
         @classmethod
         def model_validate_json(cls, json_data: str | bytes | bytearray, *, strict: bool | None = None,
