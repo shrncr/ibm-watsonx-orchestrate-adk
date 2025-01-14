@@ -151,15 +151,3 @@ class ToolSpec(BaseModel):
     output_schema: ToolResponseBody = None
     binding: ToolBinding = None
 
-
-class OpenAPIRuntimeToolSecurityBinding(BaseModel):
-    name: str
-    username: str = None
-    password: str = None
-    api_key: str = None
-
-
-class OpenAPIRuntimeServerBinding(BaseModel):
-    server: str
-    security_schema: OpenAPIRuntimeToolSecurityBinding = None
-
