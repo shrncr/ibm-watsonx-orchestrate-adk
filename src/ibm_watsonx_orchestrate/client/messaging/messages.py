@@ -9,7 +9,7 @@ import ibm_watsonx_orchestrate.client.messaging
 def get_message_dict(locale: str) -> dict[str, str]:
     file_name = "messages_" + locale + ".json"
     message_dict = {}
-    path = os.path.dirname(ibm_watsonx_orchestrate.messaging.__file__)
+    path = os.path.dirname(ibm_watsonx_orchestrate.client.messaging.__file__)
     messages = []
     # try to load the respective json file for the locale
     try:

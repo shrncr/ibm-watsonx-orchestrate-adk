@@ -29,13 +29,13 @@ class Credentials:
     """
 
     def __init__(
-        self,
-        *,
-        url: str | None = None,
-        api_key: str | None = None,
-        token: str | None = None,
-        instance_id: str | None = None,
-        verify: str | bool | None = None,
+            self,
+            *,
+            url: str | None = None,
+            api_key: str | None = None,
+            token: str | None = None,
+            instance_id: str | None = None,
+            verify: str | bool | None = None,
     ) -> None:
         env_credentials = Credentials._get_values_from_env_vars()
 
@@ -49,6 +49,15 @@ class Credentials:
         for k, v in env_credentials.items():
             if self.__dict__.get(k) is None:
                 self.__dict__[k] = v
+
+    @staticmethod
+    def from_dict(dict: dict) -> Credentials:
+        creds = Credentials()
+        for k, v in dict.items():
+            setattr(creds, k, v)
+
+        return creds
+
 
     @staticmethod
     def _get_values_from_env_vars() -> dict[str, Any]:
@@ -88,7 +97,7 @@ class Credentials:
 
         for env_key, property_key in env_vars_mapping.items():
             if (
-                os.environ.get(env_key) is None or os.environ.get(env_key) == ""
+                    os.environ.get(env_key) is None or os.environ.get(env_key) == ""
             ) and self.__dict__.get(property_key) is not None:
                 os.environ[env_key] = str(self.__dict__[property_key])
 
