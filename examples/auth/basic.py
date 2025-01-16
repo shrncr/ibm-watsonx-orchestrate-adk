@@ -1,5 +1,5 @@
 from ibm_watsonx_orchestrate.client.credentials import Credentials
-from ibm_watsonx_orchestrate.client import Client
+from ibm_watsonx_orchestrate.client.client import Client
 
 # Set platform details.
 # Note: wxo_instance_id pertains to the wxO tenant ID.

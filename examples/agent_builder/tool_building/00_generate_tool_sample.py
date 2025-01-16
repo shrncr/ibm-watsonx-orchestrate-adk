@@ -4,8 +4,7 @@ from typing import Optional
 import httpx
 from pydantic import BaseModel
 
-from ibm_watsonx_orchestrate.agent_builder.tools import tool,\
-    OpenAPIRuntimeServerBinding, ToolResponseBody, JsonSchemaObject, ToolPermission #, create_openapi_json_tool_from_uri
+from ibm_watsonx_orchestrate.agent_builder.tools import tool, ToolPermission
 
 
 class CatFact(BaseModel):

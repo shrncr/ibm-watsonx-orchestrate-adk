@@ -8,8 +8,7 @@ import docstring_parser
 import yaml
 from langchain_core.tools.base import create_schema_from_function
 from langchain_core.utils.json_schema import dereference_refs
-from openai import BaseModel
-from pydantic import TypeAdapter
+from pydantic import TypeAdapter, BaseModel
 
 from .base_tool import BaseTool
 from .types import ToolSpec, ToolPermission, ToolRequestBody, ToolResponseBody, JsonSchemaObject, ToolBinding, \
@@ -42,7 +41,7 @@ class PythonTool(BaseTool):
             else:
                 raise ValueError('file must end in .json, .yaml, or .yml')
 
-        if spec.binding.python is None or spec.binding.python is None:
+        if spec.binding.python is None:
             raise ValueError('failed to load python tool as the tool had no python binding')
 
         [module, fn_name] = spec.binding.python.function.split(':')

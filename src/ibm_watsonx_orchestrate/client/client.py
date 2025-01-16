@@ -1,14 +1,12 @@
 import copy
 import logging
-import os
-from warnings import warn
 from typing import Any, cast
 
-from ibm_watsonx_orchestrate.client.credentials import Credentials
 from ibm_watsonx_orchestrate.client.client_errors import NoCredentialsProvided, ClientError
+from ibm_watsonx_orchestrate.client.credentials import Credentials
+from ibm_watsonx_orchestrate.client.messaging.chat_messages import ChatMessages
 from ibm_watsonx_orchestrate.client.messaging.messages import Messages
 from ibm_watsonx_orchestrate.client.resources.threads import Threads
-from ibm_watsonx_orchestrate.client.messaging.chat_messages import ChatMessages
 from ibm_watsonx_orchestrate.client.service_instance import ServiceInstance
 
 

@@ -31,8 +31,17 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3.4,<9.0.0",
-    "snapshottest==1.0.0a1"
+    "snapshottest==1.0.0a1",
+    "pytest-mock==3.14.0",
+    "pytest-asyncio==0.25.1",
+    "coverage[toml]>=6.5",
 ]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pkg[dev]"
+]
+detached = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ibm_watsonx_orchestrate"]
