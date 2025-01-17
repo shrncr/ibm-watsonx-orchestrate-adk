@@ -58,7 +58,6 @@ class Credentials:
 
         return creds
 
-
     @staticmethod
     def _get_values_from_env_vars() -> dict[str, Any]:
         def get_value_from_file(filename: str) -> str:

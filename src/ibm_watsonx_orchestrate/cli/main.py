@@ -1,0 +1,16 @@
+import typer
+from ibm_watsonx_orchestrate.cli.commands.login.login_command import login_app
+from ibm_watsonx_orchestrate.cli.commands.tools.tools_command import tools_app
+from ibm_watsonx_orchestrate.cli.commands.agents.agents_command import agents_app
+from ibm_watsonx_orchestrate.cli.commands.server.server_command import server_app
+from ibm_watsonx_orchestrate.cli.commands.chat.chat_command import chat_app
+
+app = typer.Typer(no_args_is_help=True)
+app.add_typer(login_app)
+app.add_typer(tools_app, name="tools")
+app.add_typer(agents_app, name="agents")
+app.add_typer(server_app, name="server")
+app.add_typer(chat_app, name="chat")
+
+if __name__ == "__main__":
+    app()

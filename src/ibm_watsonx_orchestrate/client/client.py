@@ -76,7 +76,7 @@ class Client:
             "https://dev-conn.watson-orchestrate.ibm.com": "https://api.dev-conn.watson-orchestrate.ibm.com",
         }
 
-        import ibm_watsonx_orchestrate._wrappers.requests as requests
+        import ibm_watsonx_orchestrate.client._wrappers.requests as requests
 
         requests.packages.urllib3.disable_warnings()  # type: ignore[attr-defined]
 
@@ -93,9 +93,9 @@ class Client:
         if credentials is None:
             raise NoCredentialsProvided()
         if self.credentials.url is None:
-            raise ClientError(ChatMessages.get_message(message_id="url_not_provided"))
+            raise ClientError(Messages.get_message(message_id="url_not_provided"))
         if not self.credentials.url.startswith("https://"):
-            raise ClientError(ChatMessages.get_message(message_id="invalid_url"))
+            raise ClientError(Messages.get_message(message_id="invalid_url"))
         if self.credentials.url[-1] == "/":
             self.credentials.url = self.credentials.url.rstrip("/")
 
@@ -113,7 +113,7 @@ class Client:
     def _check_if_either_is_set(self) -> None:
         if self.default_space_id is None and self.default_project_id is None:
             raise ClientError(
-                ChatMessages.get_message(
+                Messages.get_message(
                     message_id="it_is_mandatory_to_set_the_space_project_id"
                 )
             )
@@ -211,14 +211,14 @@ class Client:
                 return True
             else:
                 raise ClientError(
-                    ChatMessages.get_message(message_id="apikey_value_cannot_be_empty")
+                    Messages.get_message(message_id="apikey_value_cannot_be_empty")
                 )
         elif self.credentials.token is not None:
             if self.credentials.token != "":
                 return True
             else:
                 raise ClientError(
-                    ChatMessages.get_message(message_id="token_value_cannot_be_empty")
+                    Messages.get_message(message_id="token_value_cannot_be_empty")
                 )
         else:
             return False
@@ -229,20 +229,20 @@ class Client:
                 return True
             else:
                 raise ClientError(
-                    ChatMessages.get_message(message_id="apikey_value_cannot_be_empty")
+                    Messages.get_message(message_id="apikey_value_cannot_be_empty")
                 )
         elif self.credentials.token is not None:
             if self.credentials.token != "":
                 return True
             else:
                 raise ClientError(
-                    ChatMessages.get_message(message_id="token_value_cannot_be_empty")
+                    Messages.get_message(message_id="token_value_cannot_be_empty")
                 )
         else:
             return False
 
     def _check_if_fm_ga_api_available(self) -> bool:
-        import ibm_watsonx_orchestrate._wrappers.requests as requests
+        import ibm_watsonx_orchestrate.client._wrappers.requests as requests
 
         response_ga_api = requests.get(
             url="{}/ml/v1/foundation_model_specs?limit={}".format(

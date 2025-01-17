@@ -335,7 +335,7 @@ class ServiceInstance:
             token = response.json().get("token")
             self._expiration_datetime = None
         else:
-            raise ClientError("Error getting MCSP Token.", response)
+            raise ClientError("Error getting MCSP Token.", response.text)
         return token
 
     def _is_token_refresh_possible(self) -> bool:
