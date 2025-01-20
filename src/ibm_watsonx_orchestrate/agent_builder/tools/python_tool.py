@@ -63,6 +63,9 @@ def _fix_optional(schema):
     # This removes union types with null and simply marks the field as not required
     not_required = []
     replacements = {}
+    if schema.required is None:
+        schema.required = []
+
     for k, v in schema.properties.items():
         if v.type == 'null' and k in schema.required:
             not_required.append(k)

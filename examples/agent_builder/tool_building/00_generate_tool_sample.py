@@ -12,7 +12,7 @@ class CatFact(BaseModel):
     length: int
 
 @tool(permission=ToolPermission.READ_WRITE)
-async def get_cat_fact(max_length: Optional[int]) -> CatFact:
+async def get_cat_fact(max_length: Optional[int] = None) -> CatFact:
     """
     Get a collection of facts about cats
     :param max_length: the max length of the string that is the cat fact
