@@ -14,22 +14,25 @@ class ToolPermission(str, Enum):
 class JsonSchemaObject(BaseModel):
     model_config = ConfigDict(extra='allow')
 
-    type: Literal['object', 'string', 'number', 'integer', 'boolean', 'array', 'null'] = 'object'
-    title: str = None
-    description: str = None
-    properties: Dict[str, 'JsonSchemaObject'] = None
-    required: List[str] = None
-    items: 'JsonSchemaObject' = None
-    uniqueItems: bool = None
-    default: Any = None
-    enum: List[Any] = None
-    minimum: float = None
-    maximum: float = None
-    minLength: int = None
-    maxLength: int = None
-    format: str = None
-    anyOf: List['JsonSchemaObject'] = None
+    type: Optional[Literal['object', 'string', 'number', 'integer', 'boolean', 'array', 'null']] = None
+    title: str | None = None
+    description: str | None = None
+    properties: Optional[Dict[str, 'JsonSchemaObject']] = None
+    required: Optional[List[str]] = None
+    items: Optional['JsonSchemaObject'] = None
+    uniqueItems: bool | None = None
+    default: Any | None = None
+    enum: List[Any] | None = None
+    minimum: float | None = None
+    maximum: float | None = None
+    minLength: int | None = None
+    maxLength: int | None = None
+    format: str | None = None
+    pattern: str | None = None
+    anyOf: Optional[List['JsonSchemaObject']] = None
     in_field: Optional[Literal['query', 'header', 'path', 'body']] = Field(None, alias='in')
+    aliasName: str | None = None
+    "Runtime feature where the sdk can provide the original name of a field before prefixing"
 
 
 class ToolRequestBody(BaseModel):
@@ -53,14 +56,12 @@ class ToolResponseBody(BaseModel):
 
 
 class OpenApiSecurityScheme(BaseModel):
-    model_config = ConfigDict(extra='allow')
-
     type: Literal['apiKey', 'http', 'oauth2', 'openIdConnect']
-    scheme: Literal['basic', 'bearer', 'oauth'] = None
-    in_field: Literal['query', 'header', 'cookie'] = None
-    name: str = None
-    open_id_connect_url: str = None
-    flows: dict = None
+    scheme: Optional[Literal['basic', 'bearer', 'oauth']] = None
+    in_field: Optional[Literal['query', 'header', 'cookie']] = None
+    name: str | None = None
+    open_id_connect_url: str | None = None
+    flows: dict | None = None
 
     @model_validator(mode='after')
     def validate_security_scheme(self) -> 'OpenApiSecurityScheme':
@@ -89,8 +90,9 @@ class OpenApiToolBinding(BaseModel):
     http_method: HTTP_METHOD
     http_path: str
     success_status_code: int = 200  # this is a diff from the spec
-    security: List[OpenApiSecurityScheme]
-    servers: List[str]
+    security: Optional[List[OpenApiSecurityScheme]] = None
+    servers: Optional[List[str]] = None
+    app_id: str | None = None
 
 
 class PythonToolBinding(BaseModel):

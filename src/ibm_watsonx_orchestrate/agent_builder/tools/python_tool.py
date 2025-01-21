@@ -13,7 +13,6 @@ from pydantic import TypeAdapter, BaseModel
 from .base_tool import BaseTool
 from .types import ToolSpec, ToolPermission, ToolRequestBody, ToolResponseBody, JsonSchemaObject, ToolBinding, \
     PythonToolBinding
-from ..utils.config import runtime_context
 
 _all_tools = []
 
@@ -24,12 +23,7 @@ class PythonTool(BaseTool):
         self.fn = fn
 
     def __call__(self, *args, **kwargs):
-        if runtime_context.environment == 'local':
-            return self.fn(*args, **kwargs)
-        else:
-            # Invoke the function on the runtime
-            # Includes binding information about what module nad method to call
-            pass
+        return self.fn(*args, **kwargs)
 
     @staticmethod
     def from_spec(file: str) -> 'PythonTool':

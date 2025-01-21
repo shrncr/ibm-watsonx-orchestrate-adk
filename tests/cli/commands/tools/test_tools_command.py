@@ -10,6 +10,7 @@ def test_tool_import_call_no_params():
             skillset_id=None,
             skill_id=None,
             skill_operation_path=None,
+            app_id=None
         )
 
 
@@ -22,6 +23,7 @@ def test_tool_import_call_python():
             skillset_id=None,
             skill_id=None,
             skill_operation_path=None,
+            app_id=None
         )
 
 def test_tool_import_call_openapi():
@@ -33,6 +35,7 @@ def test_tool_import_call_openapi():
             skillset_id=None,
             skill_id=None,
             skill_operation_path=None,
+            app_id=None
         )
 
 
@@ -43,6 +46,7 @@ def test_tool_import_call_skill():
             skillset_id="fake_skill_set_id",
             skill_id="fake_skill_id",
             skill_operation_path="fake_path",
+            app_id=None
         )
         mock.assert_called_once_with(
             kind="skill",
@@ -50,4 +54,5 @@ def test_tool_import_call_skill():
             skillset_id="fake_skill_set_id",
             skill_id="fake_skill_id",
             skill_operation_path="fake_path",
+            app_id=None
         )

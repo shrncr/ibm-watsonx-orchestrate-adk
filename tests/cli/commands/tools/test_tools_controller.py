@@ -1,8 +1,12 @@
+from unittest import mock
+
 from ibm_watsonx_orchestrate.cli.commands.tools import tools_controller
 from typer import BadParameter
 import json
 from unittest.mock import patch
 import os
+
+from ibm_watsonx_orchestrate.cli.commands.tools.tools_controller import ToolKind
 
 
 class MockSDKResponse:
@@ -13,32 +17,59 @@ class MockSDKResponse:
         return json.dumps(self.response_obj)
 
 
-# @patch("ibm_watsonx_orchestrate.cli.command.tool_import_command.create_openapi_json_tool")
-# def test_openapi_params_valid(mock, capsys):
-#     mock.return_value = MockSDKResponse(
-#         {
-#             "name": "getEmployeeTimeOff",
-#             "permission": "READ_ONLY",
-#         }
-#     )
-#     tool_import_command.handle("openapi", file="tests/cli/resources/yaml_samples/tool.yaml")
-#     captured = capsys.readouterr()
-#     json_captured = json.loads(str(captured.out))
+def test_openapi_params_valid(capsys):
+    calls = []
 
-#     assert mock.called
-#     assert mock.call_args_list[0][1]["http_method"] == "GET"
-#     assert mock.call_args_list[0][1]["http_path"] == "/employees/{employeeId}/timeoff"
+    async def create_openapi_json_tools_from_uri(*args, **kwargs):
+        calls.append((args, kwargs))
+        return []
 
-#     assert json_captured["name"] == "getEmployeeTimeOff"
-#     assert json_captured["permission"] == "READ_ONLY"
+    with mock.patch(
+            'ibm_watsonx_orchestrate.cli.commands.tools.tools_controller.create_openapi_json_tools_from_uri',
+            create_openapi_json_tools_from_uri
+    ):
+        file = "../resources/yaml_samples/tool.yaml"
+        tools_controller.import_tool(
+            ToolKind.openapi,
+            file=file,
+            app_id='appId'
+        )
+
+        assert calls == [
+            (
+                ('../resources/yaml_samples/tool.yaml', 'appId'),
+                {}
+            )
+        ]
 
 
-# def test_openapi_no_file():
-#     try:
-#         tool_import_command.handle("openapi", file=None)
-#         assert False
-#     except BadParameter:
-#         assert True
+def test_openapi_no_app_id():
+    calls = []
+
+    async def create_openapi_json_tools_from_uri(*args, **kwargs):
+        calls.append((args, kwargs))
+        return []
+
+    with mock.patch(
+            'ibm_watsonx_orchestrate.cli.commands.tools.tools_controller.create_openapi_json_tools_from_uri',
+            create_openapi_json_tools_from_uri
+    ):
+        tools_controller.import_tool(ToolKind.openapi, file="tests/cli/resources/yaml_samples/tool.yaml",  app_id=None)
+        assert calls == [
+            (
+                ('tests/cli/resources/yaml_samples/tool.yaml', None),
+                {}
+            )
+        ]
+
+
+def test_openapi_no_file():
+    try:
+        tools_controller.import_tool(ToolKind.openapi, file=None)
+        assert False
+    except BadParameter:
+        assert True
+
 
 
 def test_python_params_valid(capsys):

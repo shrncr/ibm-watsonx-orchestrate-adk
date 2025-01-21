@@ -1,3 +1,5 @@
+import asyncio
+
 import typer
 from typing import Generator
 from enum import Enum
@@ -8,6 +10,10 @@ from pathlib import Path
 import rich
 import inspect
 
+from ibm_watsonx_orchestrate.agent_builder.tools import create_openapi_json_tools_from_uri
+
+
+
 class ToolKind(str, Enum):
     openapi = "openapi"
     python = "python"
@@ -15,6 +21,11 @@ class ToolKind(str, Enum):
 
 
 def validate_params(kind: ToolKind, **args) -> None:
+    if kind != 'openapi' and args.get('app_id') is not None:
+        raise typer.BadParameter(
+            "--app_id parameter can only be used with openapi tools"
+        )
+
     if kind in {"openapi", "python"} and args["file"] is None:
         raise typer.BadParameter(
             "--file (-f) is required when kind is set to either python or openapi"
@@ -53,36 +64,18 @@ def import_python_tool(file: str) -> None:
     sys.path.append(str(file_directory))
     module = importlib.import_module(file_name)
 
-    decorated_funtions = list(functionsWithDecorator(module, "tool"))
+    decorated_functions = list(functionsWithDecorator(module, "tool"))
 
-    for function in decorated_funtions:
+    for function in decorated_functions:
         spec = json.loads(getattr(module, function).dumps_spec())
         rich.print_json(data=spec)
 
 
-# def import_openapi_tool(file: str) -> None:
-    # with open(file, "r") as f:
-    #     yaml_content = yaml.load(f, Loader=yaml.SafeLoader)
+async def import_openapi_tool(file: str, app_id: str) -> None:
+    tools = await create_openapi_json_tools_from_uri(file, app_id)
 
-    # # TODO: account to multiple http verbs, multiple paths
-    # endpoint_path = list(yaml_content["paths"].keys())[0]
-    # http_method = list(yaml_content["paths"][endpoint_path].keys())[0]
+    rich.print_json(data=[tool.__tool_spec__.model_dump(exclude_none=True, exclude_unset=True, by_alias=True) for tool in tools])
 
-    # cfg = Config()
-    # api_key = cfg.read(AUTH_SECTION_HEADER, AUTH_MCSP_API_KEY_OPT)
-
-    # tool = create_openapi_json_tool(
-    #     yaml_content,
-    #     http_path=endpoint_path,
-    #     http_method=http_method.upper(),
-    #     runtime_server_binding=OpenAPIRuntimeServerBinding(
-    #         server="http://localhost:3000",
-    #         credentials=OpenAPIRuntimeAPIBasicCredentials(key="auth", api_key=api_key),
-    #     ),
-    # )
-
-    # spec = json.loads(tool.dumps_spec())
-    # rich.print_json(data=spec)
 
 
 def import_tool(kind: ToolKind, **args) -> None:
@@ -92,8 +85,7 @@ def import_tool(kind: ToolKind, **args) -> None:
         case "python":
             import_python_tool(file=args["file"])
         case "openapi":
-            # import_openapi_tool(file=args["file"])
-            print("OpenAPI Import not implemented yet")
+            asyncio.run(import_openapi_tool(file=args["file"], app_id=args.get('app_id')))
         case "skill":
             print("Skill Import not implemented yet")
         case _:

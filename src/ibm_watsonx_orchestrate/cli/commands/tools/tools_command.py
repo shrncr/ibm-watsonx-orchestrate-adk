@@ -26,6 +26,12 @@ def tool_import(
     skill_operation_path: Annotated[
         str, typer.Option("--skill_operation_path", help="Skill operation path in WXO")
     ] = None,
+    app_id: Annotated[
+        str, typer.Option(
+            '--app_id',
+            help='The app_id of the connection to associate with this tool. A application connection represents the server authentication credentials needed to connection to this tool (for example Api Keys, Basic, Bearer or OAuth credentials).'
+        )
+    ] = None
 ):
     tools_controller.import_tool(
         kind=kind,
@@ -33,4 +39,5 @@ def tool_import(
         skillset_id=skillset_id,
         skill_id=skill_id,
         skill_operation_path=skill_operation_path,
+        app_id=app_id
     )

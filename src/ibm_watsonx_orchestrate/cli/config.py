@@ -47,7 +47,7 @@ class Config:
 
         os.makedirs(os.path.dirname(self.config_file_path), exist_ok=True)
         open(self.config_file_path, 'a').close()
-        
+
 
     def read(self, section: str, option: str) -> any:
         try:
