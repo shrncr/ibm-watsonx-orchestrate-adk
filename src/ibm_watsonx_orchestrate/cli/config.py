@@ -1,5 +1,6 @@
 import os
 import yaml
+from ibm_watsonx_orchestrate.utils.utils import yaml_safe_load
 
 DEFAULT_CONFIG_FILE_FOLDER = f"{os.path.expanduser('~')}/.config/orchestrate"
 DEFAULT_CONFIG_FILE = "config.yaml"
@@ -69,7 +70,7 @@ class Config:
         config_data = {}
         try:
             with open(self.config_file_path, 'r') as conf_file:
-                config_data = yaml.safe_load(conf_file) or {}
+                config_data = yaml_safe_load(conf_file) or {}
         except FileNotFoundError:
             pass
             

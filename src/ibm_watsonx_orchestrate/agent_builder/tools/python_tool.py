@@ -10,6 +10,7 @@ from langchain_core.tools.base import create_schema_from_function
 from langchain_core.utils.json_schema import dereference_refs
 from pydantic import TypeAdapter, BaseModel
 
+from ibm_watsonx_orchestrate.utils.utils import yaml_safe_load
 from .base_tool import BaseTool
 from .types import ToolSpec, ToolPermission, ToolRequestBody, ToolResponseBody, JsonSchemaObject, ToolBinding, \
     PythonToolBinding
@@ -29,7 +30,7 @@ class PythonTool(BaseTool):
     def from_spec(file: str) -> 'PythonTool':
         with open(file, 'r') as f:
             if file.endswith('.yaml') or file.endswith('.yml'):
-                spec = ToolSpec.model_validate(yaml.safe_load(f))
+                spec = ToolSpec.model_validate(yaml_safe_load(f))
             elif file.endswith('.json'):
                 spec = ToolSpec.model_validate(json.load(f))
             else:

@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 import rich
 import inspect
+from ibm_watsonx_orchestrate.agent_builder.tools import BaseTool
 
 from ibm_watsonx_orchestrate.agent_builder.tools import create_openapi_json_tools_from_uri
 
@@ -44,30 +45,22 @@ def validate_params(kind: ToolKind, **args) -> None:
                 f"Missing flags {missing_params} required for kind skill"
             )
 
-
-def functionsWithDecorator(
-    module: any, decorator_name: str
-) -> Generator[str, None, None]:
-    sourcelines = inspect.getsourcelines(module)[0]
-    for i, line in enumerate(sourcelines):
-        line = line.strip()
-        if line.split("(")[0].strip() == "@" + decorator_name:
-            nextLine = sourcelines[i + 1]
-            name = nextLine.split("def")[1].split("(")[0].strip()
-            yield (name)
-
-
 def import_python_tool(file: str) -> None:
     file_path = Path(file)
     file_directory = file_path.parent
     file_name = file_path.stem
     sys.path.append(str(file_directory))
     module = importlib.import_module(file_name)
+    del sys.path[-1]
 
-    decorated_functions = list(functionsWithDecorator(module, "tool"))
+    tools = []
 
-    for function in decorated_functions:
-        spec = json.loads(getattr(module, function).dumps_spec())
+    for _, obj in inspect.getmembers(module):
+        if isinstance(obj, BaseTool) :
+            tools.append(obj)
+
+    for tool in tools:
+        spec = json.loads(tool.dumps_spec())
         rich.print_json(data=spec)
 
 

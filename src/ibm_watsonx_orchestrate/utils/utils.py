@@ -34,6 +34,13 @@ from ibm_watsonx_orchestrate.client.client_errors import (
     CannotInstallLibrary,
 )
 
+import yaml
+from typing import BinaryIO
+
+# disables the automatic conversion of date-time objects to datetime objects and leaves them as strings
+yaml.constructor.SafeConstructor.yaml_constructors[u'tag:yaml.org,2002:timestamp'] = \
+    yaml.constructor.SafeConstructor.yaml_constructors[u'tag:yaml.org,2002:str']
+
 if TYPE_CHECKING:
     import collections
     from types import TracebackType
@@ -42,6 +49,7 @@ if TYPE_CHECKING:
 
     PipelineType: TypeAlias = Any
     MLModelType: TypeAlias = Any
+
 
 INSTANCE_DETAILS_TYPE = "instance_details_type"
 PIPELINE_DETAILS_TYPE = "pipeline_details_type"
@@ -90,3 +98,7 @@ class NumpyTypeEncoder(json.JSONEncoder):
             return obj.tolist()
         else:
             return super().default(obj)
+
+
+def yaml_safe_load(file : BinaryIO) -> dict:
+    return yaml.safe_load(file)

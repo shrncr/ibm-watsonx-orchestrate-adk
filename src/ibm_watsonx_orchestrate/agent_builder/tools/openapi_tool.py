@@ -10,6 +10,7 @@ import yaml.constructor
 import re
 import httpx
 import jsonref
+from ibm_watsonx_orchestrate.utils.utils import yaml_safe_load
 from .types import ToolSpec
 from .base_tool import BaseTool
 from .types import HTTP_METHOD, ToolPermission, ToolRequestBody, ToolResponseBody, \
@@ -48,7 +49,7 @@ class OpenAPITool(BaseTool):
     def from_spec(file: str) -> 'OpenAPITool':
         with open(file, 'r') as f:
             if file.endswith('.yaml') or file.endswith('.yml'):
-                spec = ToolSpec.model_validate(yaml.safe_load(f))
+                spec = ToolSpec.model_validate(yaml_safe_load(f))
             elif file.endswith('.json'):
                 spec = ToolSpec.model_validate(json.load(f))
             else:
@@ -60,7 +61,7 @@ class OpenAPITool(BaseTool):
         return OpenAPITool(spec=spec)
 
     def __repr__(self):
-        return f"OpenAPITool(fn={self.__tool_spec__.binding.python.function}, name='{self.__tool_spec__.name}', description='{self.__tool_spec__.description}')"
+        return f"OpenAPITool(method={self.__tool_spec__.binding.openapi.http_method}, path={self.__tool_spec__.binding.openapi.http_path}, name='{self.__tool_spec__.name}', description='{self.__tool_spec__.description}')"
 
     def __str__(self):
         return self.__repr__()
@@ -216,7 +217,7 @@ async def _get_openapi_spec_from_uri(openapi_uri: str) -> Dict[str, Any]:
             if openapi_uri.endswith('.json'):
                 openapi_contents = json.load(fp)
             elif openapi_uri.endswith('.yaml') or openapi_uri.endswith('.yml'):
-                openapi_contents = yaml.safe_load(fp)
+                openapi_contents = yaml_safe_load(fp)
             else:
                 raise ValueError(
                     f"Unexpected file extension for file {openapi_uri}, expected one of [.json, .yaml, .yml]")
@@ -231,7 +232,7 @@ async def _get_openapi_spec_from_uri(openapi_uri: str) -> Dict[str, Any]:
             r = await client.get(openapi_uri)
             if r.status_code != 200:
                 raise ValueError(f"Failed to fetch an openapi spec from {openapi_uri}, status code: {r.status_code}")
-            openapi_contents = yaml.safe_load(r.text)
+            openapi_contents = yaml_safe_load(r.text)
 
     if openapi_contents is None:
         raise ValueError(f"Unrecognized path or uri {openapi_uri}")
