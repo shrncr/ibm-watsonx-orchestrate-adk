@@ -44,7 +44,7 @@ snapshots['test_all_supported_http_methods[DELETE] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_http_methods[GET] 1'] = {
@@ -84,7 +84,7 @@ snapshots['test_all_supported_http_methods[GET] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_http_methods[POST] 1'] = {
@@ -124,7 +124,7 @@ snapshots['test_all_supported_http_methods[POST] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_http_methods[PUT] 1'] = {
@@ -164,7 +164,7 @@ snapshots['test_all_supported_http_methods[PUT] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_parameter_in_methods_except_body[cookie] 1'] = {
@@ -204,7 +204,7 @@ snapshots['test_all_supported_parameter_in_methods_except_body[cookie] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_parameter_in_methods_except_body[header] 1'] = {
@@ -244,7 +244,7 @@ snapshots['test_all_supported_parameter_in_methods_except_body[header] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_parameter_in_methods_except_body[path] 1'] = {
@@ -284,7 +284,7 @@ snapshots['test_all_supported_parameter_in_methods_except_body[path] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_all_supported_parameter_in_methods_except_body[query] 1'] = {
@@ -324,7 +324,7 @@ snapshots['test_all_supported_parameter_in_methods_except_body[query] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_body_parameters 1'] = {
@@ -374,7 +374,7 @@ snapshots['test_body_parameters 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_global_authentication[openapi_global_authentication0] 1'] = {
@@ -408,7 +408,7 @@ snapshots['test_global_authentication[openapi_global_authentication0] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_global_authentication[openapi_global_authentication1] 1'] = {
@@ -446,7 +446,7 @@ snapshots['test_global_authentication[openapi_global_authentication1] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_global_authentication[openapi_global_authentication2] 1'] = {
@@ -485,7 +485,7 @@ snapshots['test_global_authentication[openapi_global_authentication2] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_global_authentication[openapi_global_authentication3] 1'] = {
@@ -524,7 +524,7 @@ snapshots['test_global_authentication[openapi_global_authentication3] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_global_authentication[openapi_global_authentication4] 1'] = {
@@ -563,7 +563,7 @@ snapshots['test_global_authentication[openapi_global_authentication4] 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_http_get_with_api_key_auth 1'] = {
@@ -654,7 +654,7 @@ snapshots['test_http_get_with_api_key_auth 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_http_get_with_basic_auth 1'] = {
@@ -745,7 +745,7 @@ snapshots['test_http_get_with_basic_auth 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_http_post_with_header_query_and_path_params 1'] = {
@@ -862,7 +862,7 @@ snapshots['test_http_post_with_header_query_and_path_params 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_http_put_with_json_request_body 1'] = {
@@ -966,5 +966,5 @@ snapshots['test_http_put_with_json_request_body 1'] = {
         ],
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }

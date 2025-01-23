@@ -82,7 +82,7 @@ def test_python_params_valid(capsys):
     json_captured = json.loads(str(captured.out))
 
     assert json_captured["name"] == "myName"
-    assert json_captured["permission"] == "ADMIN"
+    assert json_captured["permission"] == "admin"
 
 
 def test_python_no_file():

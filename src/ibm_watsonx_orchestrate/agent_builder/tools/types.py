@@ -5,10 +5,10 @@ from pydantic import BaseModel, model_validator, ConfigDict, Field
 
 
 class ToolPermission(str, Enum):
-    READ_ONLY = 'READ_ONLY'
-    WRITE_ONLY = 'WRITE_ONLY'
-    READ_WRITE = 'READ_WRITE'
-    ADMIN = 'ADMIN'
+    READ_ONLY = 'read_only'
+    WRITE_ONLY = 'write_only'
+    READ_WRITE = 'read_write'
+    ADMIN = 'admin'
 
 
 class JsonSchemaObject(BaseModel):

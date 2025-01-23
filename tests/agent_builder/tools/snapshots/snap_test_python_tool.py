@@ -24,7 +24,7 @@ snapshots['test_should_be_possible_to_override_defaults 1'] = {
     'name': 'myName',
     'output_schema': {
     },
-    'permission': 'ADMIN'
+    'permission': 'admin'
 }
 
 snapshots['test_should_support_pydantic_typed_args 1'] = {
@@ -225,7 +225,7 @@ snapshots['test_should_support_pydantic_typed_args 1'] = {
         'title': 'SampleParamA',
         'type': 'object'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_should_support_typed_none_args 1'] = {
@@ -250,7 +250,7 @@ snapshots['test_should_support_typed_none_args 1'] = {
     'output_schema': {
         'type': 'null'
     },
-    'permission': 'ADMIN'
+    'permission': 'admin'
 }
 
 snapshots['test_should_support_typed_optional_args 1'] = {
@@ -282,7 +282,7 @@ snapshots['test_should_support_typed_optional_args 1'] = {
             }
         ]
     },
-    'permission': 'ADMIN'
+    'permission': 'admin'
 }
 
 snapshots['test_should_support_typed_typings_inputs_and_outputs 1'] = {
@@ -308,7 +308,7 @@ snapshots['test_should_support_typed_typings_inputs_and_outputs 1'] = {
     'output_schema': {
         'type': 'string'
     },
-    'permission': 'ADMIN'
+    'permission': 'admin'
 }
 
 snapshots['test_should_use_correct_defaults 1'] = {
@@ -327,7 +327,7 @@ snapshots['test_should_use_correct_defaults 1'] = {
     'name': 'my_tool',
     'output_schema': {
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_should_work_with_dicts 1'] = {
@@ -368,7 +368,7 @@ snapshots['test_should_work_with_dicts 1'] = {
         },
         'type': 'array'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }
 
 snapshots['test_should_work_with_lists 1'] = {
@@ -406,5 +406,5 @@ snapshots['test_should_work_with_lists 1'] = {
         },
         'type': 'array'
     },
-    'permission': 'READ_ONLY'
+    'permission': 'read_only'
 }

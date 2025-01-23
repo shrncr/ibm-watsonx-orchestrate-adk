@@ -16,7 +16,7 @@ def test_should_use_correct_defaults(snapshot):
     snapshot.assert_match(spec)
     assert spec['name'] == 'my_tool'
     assert spec.get('description') == None
-    assert spec['permission'] == 'READ_ONLY'
+    assert spec['permission'] == 'read_only'
     assert spec['binding']['python']['function'] == 'test_python_tool:my_tool'
 
 
@@ -32,7 +32,7 @@ def test_should_be_possible_to_override_defaults(snapshot):
     snapshot.assert_match(spec)
     assert spec['name'] == 'myName'
     assert spec['description'] == 'the description'
-    assert spec['permission'] == 'ADMIN'
+    assert spec['permission'] == 'admin'
     assert spec['binding']['python']['function'] == 'test_python_tool:my_tool'
 
 
