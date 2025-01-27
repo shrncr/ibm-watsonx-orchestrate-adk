@@ -18,7 +18,7 @@ from ibm_watsonx_orchestrate.agent_builder.tools import create_openapi_json_tool
 class ToolKind(str, Enum):
     openapi = "openapi"
     python = "python"
-    skill = "skill"
+    # skill = "skill"
 
 
 def validate_params(kind: ToolKind, **args) -> None:
