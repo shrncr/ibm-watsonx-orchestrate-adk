@@ -1,5 +1,6 @@
 import os
 import yaml
+from copy import deepcopy
 from ibm_watsonx_orchestrate.utils.utils import yaml_safe_load
 
 DEFAULT_CONFIG_FILE_FOLDER = f"{os.path.expanduser('~')}/.config/orchestrate"
@@ -19,14 +20,15 @@ AUTH_MCSP_TOKEN_OPT = "wxo_mcsp_token"
 APP_WXO_URL_OPT = "wxo_url"
 
 def merge_configs(source: dict, destination: dict) -> dict:
-    for key, value in source.items():
-        if isinstance(value, dict):
-            node = destination.setdefault(key, {})
-            merge_configs(value, node)
-        else:
-            destination[key] = value
+    merged_object = deepcopy(source)
 
-    return destination
+    for key, value in destination.items():
+        if isinstance(value, dict):
+            node = merged_object.setdefault(key, {})
+            merged_object[key] = merge_configs(node, value)
+        else:
+            merged_object[key] = value
+    return merged_object
 
 
 class Config:
@@ -73,7 +75,7 @@ class Config:
                 config_data = yaml_safe_load(conf_file) or {}
         except FileNotFoundError:
             pass
-            
+        
         config_data = merge_configs(config_data, object)
             
         with open(self.config_file_path, 'w') as conf_file:
