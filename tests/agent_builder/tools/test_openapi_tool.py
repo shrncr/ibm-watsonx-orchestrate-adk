@@ -6,7 +6,12 @@ from os import path
 import pytest
 from pydantic import BaseModel, Field
 
-from agent_builder.mocks.mock_httpx import get_mock_async_client, MockResponse
+# TO-DO: resolve path issue
+try:
+    from agent_builder.mocks.mock_httpx import get_mock_async_client, MockResponse
+except:
+    from tests.agent_builder.mocks.mock_httpx import get_mock_async_client, MockResponse
+
 from ibm_watsonx_orchestrate.agent_builder.tools import create_openapi_json_tool
 
 

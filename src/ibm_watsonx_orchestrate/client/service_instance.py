@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 
 from ibm_watsonx_orchestrate.client._wrappers import requests
 from ibm_watsonx_orchestrate.client.resources.href_definitions import HrefDefinitions
+from ibm_watsonx_orchestrate.client.base_service_instance import BaseServiceInstance
 
 from ibm_watsonx_orchestrate.client.client_errors import (
     ClientError,
@@ -26,10 +27,11 @@ if TYPE_CHECKING:
     from ibm_watsonx_orchestrate.client import Client
 
 
-class ServiceInstance:
+class ServiceInstance(BaseServiceInstance):
     """Connect, get details, and check usage of a Watson Machine Learning service instance."""
 
     def __init__(self, client: Client) -> None:
+        super().__init__()
         self._logger = logging.getLogger(__name__)
         self._client = client
         self._credentials = client.credentials

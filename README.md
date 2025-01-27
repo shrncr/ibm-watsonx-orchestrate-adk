@@ -25,8 +25,7 @@ pip install -e ".[dev]"
 ```
 
 ### Why `-e`?  
-The `-e` flag is optional and stands for "editable mode." This allows you to make changes to the source code of the library and have those changes reflected immediately without needing to reinstall the package. This is useful for development purposes.
-
+The `-e` flag is optional and stands for "editable mode." This allows you to make changes to the source code of the library and have those changes reflected immediately without needing to reinstall the dependency package. This is useful for development purposes.
 ---
 
 ## How to Build the distributable Package
@@ -103,6 +102,14 @@ orchestrate --help
 
 ### CLI Features
 ### `orchestrate login`
+The SDK will allow user to work with both local development environment and remote service
+#### Local development
+Prerequisite: local docker setup (under development).  
+Once the setup is ready, run the following command:
+```
+orchestrate login --local
+```
+#### Working with remote service
 The `orchestrate login` command requests 2 values from the user
 1. The URL of the WXO instance the user wishes to authenticate against. This can be passed it using the `--url` or `u` flags, or provided at runtime in response to the prompt.
 2. The API key for the WXO instance. This can be passed using the `--apikey` or  `-a` flags, or it can be provided at runtime in responce to the prompt

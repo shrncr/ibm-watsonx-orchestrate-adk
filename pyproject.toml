@@ -39,6 +39,8 @@ dev = [
     "pytest-mock==3.14.0",
     "pytest-asyncio==0.25.1",
     "coverage[toml]>=6.5",
+    "black~=22.3.0",
+    "pylint~=2.16.4",
 ]
 
 [tool.hatch.envs.default]

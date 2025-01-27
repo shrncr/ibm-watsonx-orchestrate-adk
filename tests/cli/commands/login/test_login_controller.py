@@ -24,6 +24,7 @@ class MockClient:
         self.token = "test_token"
 
 
+
 class MockErrorClient:
     def __init__(self, credentials):
         raise ClientError("Testing client error")
@@ -33,8 +34,6 @@ class MockCredentials:
     def __init__(self, url, api_key):
         pass
 
-    # def _set_env_vars_from_credentials(args):
-    #     return {}
 
 
 def test_decode_invalid_jwt():
@@ -44,6 +43,29 @@ def test_decode_invalid_jwt():
         assert False
     except jwt.DecodeError as e:
         assert True
+
+
+def test_valid_jwt():
+    data = jwt.encode({"username": "wxo-server@ibm.com", "password": "1111"}, "secret", algorithm="HS256")
+    login_controller.decode_token(data, is_local=True)
+    assert True
+
+def test_nonlocal_token_jwt():
+    data = jwt.encode({"username": "wxo-server@ibm.com", "password": "1111"}, "secret", algorithm="HS256")
+    try:
+        data = login_controller.decode_token(data, is_local=False)
+        assert False
+    except Exception as e:
+        assert True
+
+def test_nonlocal_token_with_expclaim_jwt():
+    data = jwt.encode({"username": "wxo-server@ibm.com", "password": "1111", "exp": "11111"}, "secret", algorithm="HS256")
+    try:
+        data = login_controller.decode_token(data, is_local=False)
+        assert True
+    except Exception as e:
+        assert False
+
 
 
 def test_decode_valid_jwt_missing_field():
@@ -77,7 +99,7 @@ def test_decode_valid_jwt():
 def test_handle_provided_url_and_api_key(mock):
     login_controller.login(apikey="test_api_key", url="test_url")
 
-    mock.assert_called_with("test_token")
+    mock.assert_called_with("test_token", False)
     assert mock.return_value["token"] == ("test_token")
     assert mock.return_value["exp"] == 0
 
@@ -94,7 +116,7 @@ def test_handle_url_and_api_key_from_config(mock, monkeypatch):
     monkeypatch.setattr("getpass.getpass", lambda _: "test")
     login_controller.login(None, None)
 
-    mock.assert_called_with("test_token")
+    mock.assert_called_with("test_token", False)
     assert mock.return_value["token"] == ("test_token")
     assert mock.return_value["exp"] == 0
 
@@ -111,19 +133,22 @@ def test_handle_url_and_api_key_from_input(mock, monkeypatch):
     monkeypatch.setattr("getpass.getpass", lambda _: "test")
     login_controller.login(None, None)
 
-    mock.assert_called_with("test_token")
+    mock.assert_called_with("test_token", False)
     assert mock.return_value["token"] == ("test_token")
     assert mock.return_value["exp"] == 0
 
 
 @patch("ibm_watsonx_orchestrate.cli.commands.login.login_controller.Config", MockConfig("populated_config.yaml"))
-@patch("ibm_watsonx_orchestrate.cli.commands.login.login_controller.Client", MockErrorClient)
+@patch("ibm_watsonx_orchestrate.cli.commands.login.login_controller.Client", MockClient)
 @patch("ibm_watsonx_orchestrate.cli.commands.login.login_controller.Credentials", MockCredentials)
 @patch(
     "ibm_watsonx_orchestrate.cli.commands.login.login_controller.decode_token",
-    return_value={"token": "test_token", "exp": 0},
+    return_value={"token": "test_token"},
 )
-def test_handle_client_errors(mock, capsys):
-    login_controller.login("test", "test")
+def test_handle_client_local_login(mock, capsys):
+    login_controller.login("http://localhost:4321", None, is_local=True)
     captured = capsys.readouterr()
-    assert captured.out == "Failed Login Attempt\n"
+    assert captured.out == "Successfully Logged In\n"
+
+
+

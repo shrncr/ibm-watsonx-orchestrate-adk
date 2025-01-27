@@ -42,6 +42,7 @@ class Credentials:
         self.url = url
         self.api_key = api_key
         self.token = token
+        self.local_global_token = None
         self.instance_id = instance_id
         self.verify = verify
         self._is_env_token = token is None and "token" in env_credentials

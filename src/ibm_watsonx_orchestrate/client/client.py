@@ -8,6 +8,8 @@ from ibm_watsonx_orchestrate.client.messaging.chat_messages import ChatMessages
 from ibm_watsonx_orchestrate.client.messaging.messages import Messages
 from ibm_watsonx_orchestrate.client.resources.threads import Threads
 from ibm_watsonx_orchestrate.client.service_instance import ServiceInstance
+from ibm_watsonx_orchestrate.client.local_service_instance import LocalServiceInstance
+from ibm_watsonx_orchestrate.client.utils import is_local_dev
 
 
 class Client:
@@ -73,7 +75,7 @@ class Client:
         self._user_headers: dict | None = None  # Used in set_headers() method
 
         self.PLATFORM_URLS_MAP = {
-            "https://dev-conn.watson-orchestrate.ibm.com": "https://api.dev-conn.watson-orchestrate.ibm.com",
+            "https://dev-conn.watson-orchestrate.ibm.com": "https://api.dev-conn.watson-orchestrate.ibm.com"
         }
 
         import ibm_watsonx_orchestrate.client._wrappers.requests as requests
@@ -95,20 +97,27 @@ class Client:
         if self.credentials.url is None:
             raise ClientError(Messages.get_message(message_id="url_not_provided"))
         if not self.credentials.url.startswith("https://"):
-            raise ClientError(Messages.get_message(message_id="invalid_url"))
+            if not is_local_dev(self.credentials.url):
+                raise ClientError(Messages.get_message(message_id="invalid_url"))
         if self.credentials.url[-1] == "/":
             self.credentials.url = self.credentials.url.rstrip("/")
 
-        self.PLATFORM_URL = self.PLATFORM_URLS_MAP[self.credentials.url]        
-
         # For cloud, service_instance.details will be set during space creation( if instance is associated ) or
         # while patching a space with an instance
-        self.service_instance: ServiceInstance = ServiceInstance(self)
-        self.chat_messages = ChatMessages(self)
-        self.threads = Threads(self)
-        self._logger.info(
-            Messages.get_message(message_id="client_successfully_initialized")
-        )
+        if not is_local_dev(self.credentials.url):
+            self.PLATFORM_URL = self.PLATFORM_URLS_MAP[self.credentials.url]
+            # TO-DO: untangle the referencing.
+            # we have credentials -> client -> service-instance -> client
+            # can lead to circular import when typing.
+            self.service_instance: ServiceInstance = ServiceInstance(self)
+            self.chat_messages = ChatMessages(self)
+            self.threads = Threads(self)
+            self._logger.info(
+                Messages.get_message(message_id="client_successfully_initialized")
+            )
+        else:
+            self.service_instance: LocalServiceInstance = LocalServiceInstance(self)
+
 
     def _check_if_either_is_set(self) -> None:
         if self.default_space_id is None and self.default_project_id is None:
