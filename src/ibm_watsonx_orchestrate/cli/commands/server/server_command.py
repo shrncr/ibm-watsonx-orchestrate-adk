@@ -131,7 +131,7 @@ def run_compose_lite(final_env_file: Path) -> None:
         )
         sys.exit(1)
 
-def wait_for_wxo_server_health_check(health_user, health_pass, timeout_seconds=45, interval_seconds=2):
+def wait_for_wxo_server_health_check(health_user, health_pass, timeout_seconds=90, interval_seconds=2):
     url = "http://localhost:4321/api/v1/auth/token"
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -142,7 +142,7 @@ def wait_for_wxo_server_health_check(health_user, health_pass, timeout_seconds=4
     }
 
     start_time = time.time()
-    e = None
+    errormsg = None
     while time.time() - start_time <= timeout_seconds:
         try:
             response = requests.post(url, headers=headers, data=data)
@@ -151,12 +151,12 @@ def wait_for_wxo_server_health_check(health_user, health_pass, timeout_seconds=4
             else:
                 print(f"Response code from healthcheck {response.status_code}")
         except requests.RequestException as e:
-            pass
+            errormsg = e
             #print(f"Request failed: {e}")
 
         time.sleep(interval_seconds)
-    if e:
-        print(f"Health check request failed: {e}")
+    if errormsg:
+        print(f"Health check request failed: {errormsg}")
     return False
 
 def wait_for_wxo_ui_health_check(timeout_seconds=45, interval_seconds=2):
@@ -389,7 +389,14 @@ def server_start(
     final_env_file = write_merged_env_file(merged_env_dict)
     run_compose_lite(final_env_file=final_env_file)
 
-    print(f"You can run `orchestrate chat start` to start the UI service and begin chatting.")
+    print("Waiting for ochestrate server to be fully initialized and ready...")
+    is_successful_server_healthcheck = wait_for_wxo_server_health_check(merged_env_dict['WXO_USER'], merged_env_dict['WXO_PASS'])
+    if is_successful_server_healthcheck:
+        print("Orchestrate services initialized successfuly")
+    else:
+        print("Server components are not yet fully started and ready.  You may want to check the logs with `orchestrate server logs`")
+
+    print(f"You can run `orchestrate login --local` to login or `orchestrate chat start` to start the UI service and begin chatting.")
 
 @server_app.command(name="stop")
 def server_stop(
