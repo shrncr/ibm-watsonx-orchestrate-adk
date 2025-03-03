@@ -101,11 +101,19 @@ def write_merged_env_file(merged_env: dict) -> Path:
 
 
 
-def run_compose_lite(final_env_file: Path) -> None:
+def run_compose_lite(final_env_file: Path, experimental_with_langfuse=False) -> None:
     compose_path = get_compose_file()
     compose_command = ensure_docker_compose_installed()
 
-    command = compose_command + [
+    if experimental_with_langfuse:
+        command = compose_command + [
+            '--profile',
+            'langfuse'
+        ]
+    else:
+        command = compose_command
+
+    command += [
         "-f", str(compose_path),
         "--env-file", str(final_env_file),
         "up",
@@ -212,7 +220,7 @@ def run_compose_lite_ui(user_env_file: Path, agent_name: str) -> bool:
 
     logger.info("Waiting for orchestrate server to be fully started and ready...")
 
-    health_check_timeout = int(merged_env_dict["HEALTH_TIMEOUT"]) if "HEALTH_TIMEOUT" in merged_env_dict else 90
+    health_check_timeout = int(merged_env_dict["HEALTH_TIMEOUT"]) if "HEALTH_TIMEOUT" in merged_env_dict else 120
     is_successful_server_healthcheck = wait_for_wxo_server_health_check(merged_env_dict['WXO_USER'], merged_env_dict['WXO_PASS'], timeout_seconds=health_check_timeout)
     if not is_successful_server_healthcheck:
         logger.error("Healthcheck failed orchestrate server.  Make sure you start the server components with `orchestrate server start` before trying to start the chat UI")
@@ -296,6 +304,7 @@ def run_compose_lite_down(final_env_file: Path, is_reset: bool = False) -> None:
     compose_command = ensure_docker_compose_installed()
 
     command = compose_command + [
+        '--profile', '*',
         "-f", str(compose_path),
         "--env-file", str(final_env_file),
         "down"
@@ -353,8 +362,13 @@ def run_compose_lite_logs(final_env_file: Path, is_reset: bool = False) -> None:
 def server_start(
     user_env_file: str = typer.Option(
         None,
-        "--env-file",
+        "--env-file", '-e',
         help="Path to a .env file that overrides default.env. Then environment variables override both."
+    ),
+    experimental_with_langfuse: bool = typer.Option(
+        False,
+        '--experimental-with-langfuse', '-l',
+        help=''
     )
 ):
     if user_env_file and not Path(user_env_file).exists():
@@ -383,12 +397,13 @@ def server_start(
 
     apply_llm_api_key_defaults(merged_env_dict)
 
+
     final_env_file = write_merged_env_file(merged_env_dict)
-    run_compose_lite(final_env_file=final_env_file)
+    run_compose_lite(final_env_file=final_env_file, experimental_with_langfuse=experimental_with_langfuse)
 
     logger.info("Waiting for orchestrate server to be fully initialized and ready...")
 
-    health_check_timeout = int(merged_env_dict["HEALTH_TIMEOUT"]) if "HEALTH_TIMEOUT" in merged_env_dict else 90
+    health_check_timeout = int(merged_env_dict["HEALTH_TIMEOUT"]) if "HEALTH_TIMEOUT" in merged_env_dict else 120
     is_successful_server_healthcheck = wait_for_wxo_server_health_check(merged_env_dict['WXO_USER'], merged_env_dict['WXO_PASS'], timeout_seconds=health_check_timeout)
     if is_successful_server_healthcheck:
         logger.info("Orchestrate services initialized successfuly")
@@ -396,12 +411,14 @@ def server_start(
         logger.warning("Server components are not yet fully started and ready.  You may want to check the logs with `orchestrate server logs`")
 
     logger.info(f"You can run `orchestrate env activate local` to set your environment or `orchestrate chat start` to start the UI service and begin chatting.")
+    if experimental_with_langfuse:
+        logger.info(f"You can access a the observability platform langfuse at http://localhost:3010, username: orchestrate@ibm.com, password: orchestrate")
 
 @server_app.command(name="stop")
 def server_stop(
     user_env_file: str = typer.Option(
         None,
-        "--env-file",
+        "--env-file", '-e',
         help="Path to a .env file that overrides default.env. Then environment variables override both."
     )
 ):
@@ -421,7 +438,7 @@ def server_stop(
 def server_reset(
     user_env_file: str = typer.Option(
         None,
-        "--env-file",
+        "--env-file", '-e',
         help="Path to a .env file that overrides default.env. Then environment variables override both."
     )
 ):
@@ -442,7 +459,7 @@ def server_reset(
 def server_logs(
     user_env_file: str = typer.Option(
         None,
-        "--env-file",
+        "--env-file", '-e',
         help="Path to a .env file that overrides default.env. Then environment variables override both."
     )
 ):
